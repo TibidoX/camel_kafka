@@ -1,15 +1,56 @@
+#camel:
+#  springboot:
+#    main-run-controller: true
+#kafka:
+#  broker1:
+#    host: 'localhost:9092'
+#    camel-request-path: kafka:requests?brokers={{kafka.broker1.host}}&groupId=camel
+#  broker2:
+#    host: 'localhost:19092'
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://localhost/shooter
+#    username: postgres
+#    password: 1234
+#    driver-class-name: org.postgresql.Driver
+
 camel:
   springboot:
     main-run-controller: true
+
 kafka:
   broker1:
     host: 'localhost:9092'
     camel-request-path: kafka:requests?brokers={{kafka.broker1.host}}&groupId=camel
   broker2:
     host: 'localhost:19092'
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost/shooter
     username: postgres
     password: 1234
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 25
+  jpa:
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        format_sql: true
+    #    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+management:
+  server:
+    port: 8080
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true

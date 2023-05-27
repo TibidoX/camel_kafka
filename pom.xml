@@ -4,8 +4,8 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.sample</groupId>
-	<artifactId>camel-spring-boot</artifactId>
+	<groupId>com.example</groupId>
+	<artifactId>Project</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.0</version>
 
@@ -192,11 +192,6 @@
 							<version>1.18.26</version>
 						</path>
 						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok-mapstruct-binding</artifactId>
-							<version>0.2.0</version>
-						</path>
-						<path>
 							<groupId>org.mapstruct</groupId>
 							<artifactId>mapstruct-processor</artifactId>
 							<version>1.5.5.Final</version>
@@ -225,39 +220,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${surefire.plugin.version}</version>
-			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxb2-maven-plugin</artifactId>
-				<version>3.1.0</version>
-				<executions>
-					<execution>
-						<id>xjc</id>
-						<goals>
-							<goal>xjc</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<packageName>com.example.Project.generated</packageName>
-					<sources>
-						<source>src/main/resources/xsd/schema.xsd</source>
-					</sources>
-					<outputDirectory>${basedir}/src/main/java</outputDirectory>
-					<clearOutputDir>false</clearOutputDir>
-
-					<xjbSources>
-						<xjbSource>src/main/resources/xsd/global.xjb</xjbSource>
-					</xjbSources>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>javax.activation</groupId>
-						<artifactId>activation</artifactId>
-						<version>1.1.1</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

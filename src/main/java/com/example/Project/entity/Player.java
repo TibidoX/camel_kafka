@@ -18,4 +18,7 @@ public class Player {
 
     @Column(nullable = false)
     private Integer wins;
+
+    @Column(nullable = false)
+    private Integer age;
 }

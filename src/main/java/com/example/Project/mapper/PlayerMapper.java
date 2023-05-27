@@ -14,5 +14,5 @@ public interface PlayerMapper {
     @Mapping(source = "name", target = "name")
     @Mapping(source = "wins", target = "wins")
     @Mapping(source = "age", target = "age")
-    Player mapGenerated(com.example.Project.generated.Player generated);
+    Player mapGenerated(generated.Player generated);
 }

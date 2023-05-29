@@ -36,17 +36,16 @@ public class SaveRoute extends RouteBuilder {
                     exchange.getMessage().setBody(player, PlayerDTO.class);
                 })
                 .marshal().json(JsonLibrary.Jackson)
-                //.marshal().fhirXml()
                 .log("Saving ${body} to kafka")
-                .to("kafka:results?brokers=localhost:9092")
-                .setBody(simple("<status>ok</status>"))
+                .to("kafka:results?brokers=localhost:19092")
+                .setBody(simple("<status>ok</status><message>success</message>"))
                 .to("direct:status")
-                .to("direct:metrics_router_increment_success_messages")
-                .to("direct:metrics_router_stop_timer")
+                .to("direct:inc_success")
+                .to("direct:stop_timer")
                 .otherwise()
-                .setBody(simple("<status>error</status><message>XML data isn't instance of Weather</message>"))
+                .setBody(simple("<status>error</status><message>XML data isn't instance of Player</message>"))
                 .to("direct:status")
-                .to("direct:metrics_router_increment_fail_messages")
-                .to("direct:metrics_router_stop_timer");
+                .to("direct:inc_fail")
+                .to("direct:stop_timer");
     }
 }

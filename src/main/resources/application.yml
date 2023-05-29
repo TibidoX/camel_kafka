@@ -43,14 +43,14 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
-management:
-  server:
-    port: 8080
-  endpoints:
-    web:
-      exposure:
-        include: health,prometheus
-  prometheus:
-    metrics:
-      export:
-        enabled: true
+#management:
+#  server:
+#    port: 8080
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health,prometheus
+#  prometheus:
+#    metrics:
+#      export:
+#        enabled: true

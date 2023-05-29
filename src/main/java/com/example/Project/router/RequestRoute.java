@@ -21,19 +21,18 @@ public class RequestRoute extends RouteBuilder {
     public void configure() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
         JaxbDataFormat jaxb = new JaxbDataFormat(jaxbContext);
-        //DataFormat jaxb = new JaxbDataFormat("generated");
 
-//        onException(UnmarshalException.class)
-//                .handled(true)
-//                .setBody(simple("Something went wrong while unmarshalling"))
-//                .to("direct:status")
-//                .to("direct:metrics_router_increment_fail_messages")
-//                .to("direct:metrics_router_stop_timer");
+        onException(UnmarshalException.class)
+                .handled(true)
+                .setBody(simple("<status>failed</status><message>Something went wrong while unmarshalling</message>"))
+                .to("direct:status")
+                .to("direct:inc_fail")
+                .to("direct:stop_timer");
 
         // Kafka Consumer
         from(from_path)
-                .to("direct:metrics_router_increment_total_messages")
-                .to("direct:metrics_router_start_timer")
+                .to("direct:inc_total")
+                .to("direct:start_timer")
                 .log("Message received from Kafka : ${body}")//
                 .unmarshal(jaxb)
                 .choice()
@@ -42,10 +41,10 @@ public class RequestRoute extends RouteBuilder {
                 .log("    on the topic ${headers[kafka.TOPIC]}")
                 .to("direct:save_to_db")
                 .otherwise()
-                .setBody(simple("XML data isn't instance of Weather"))
+                .setBody(simple("<status>failed</status><message>XML data isn't instance of Player</message>"))
                 .to("direct:status")
-                .to("direct:metrics_router_increment_fail_messages")
-                .to("direct:metrics_router_stop_timer");
+                .to("direct:inc_fail")
+                .to("direct:stop_timer");
 
     }
 }

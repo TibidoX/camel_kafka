@@ -18,7 +18,6 @@ public class StatusRoute extends RouteBuilder {
     public void configure() throws Exception {
         from("direct:status")
                 .log("Send to status_topic : ${body}")
-                //.to("kafka:status_topic?brokers={{kafka.broker1.host}}");
                 .to("kafka:status_topic?brokers=localhost:9092");
     }
 }

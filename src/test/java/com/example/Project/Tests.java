@@ -29,6 +29,8 @@ public class Tests {
 
 	@Autowired
 	ProducerTemplate producerTemplate;
+	@Autowired
+	ConsumerTemplate consumerTemplate;
 
 	@EndpointInject("mock:jpa:com.example.Project.entity.Player")
 	public MockEndpoint saveToDb;
@@ -41,56 +43,64 @@ public class Tests {
 
 	@Test
 	public void saveToDBTest() throws InterruptedException {
-//		com.example.Project.entity.Player player = new com.example.Project.entity.Player();
-//		player.setAge(25);
-//		saveToDb.expectedBodiesReceived(player);
+		com.example.Project.entity.Player player = new com.example.Project.entity.Player();
+		player.setAge(25);
+		player.setName("Eric");
+		player.setWins(90);
+		saveToDb.expectedBodiesReceived(player);
 
-//		generated.Player body = new generated.Player();
-//		body.setWins(100);
-//		body.setName("Vovaboch");
-//		body.setAge(200);
 		String body = """
 <?xml version="1.0" encoding="UTF-8"?>
     			<Player xmlns="/jaxb/gen">
-    				<age>256</age>
-    				<name>Kristina</name>
-    				<wins>999</wins>
+    				<age>25</age>
+    				<name>Eric</name>
+    				<wins>90</wins>
     			</Player>
 				""";
-//		String body = "<Player><age>256</age><name>Kristina</name><wins>999</wins></Player>";
 		producerTemplate.sendBody("direct:requests", body);
 
-		//MockEndpoint.assertIsSatisfied(saveToDb);
+		MockEndpoint.assertIsSatisfied(saveToDb);
 	}
 
-//	@Test
-//	public void kafkaResultsResultsTest() throws InterruptedException {
-//		kafkaResults.expectedBodiesReceived("{\"temperature\":25}");
-//		//kafkaResults.expectedMessageCount(1);
-//
-//		producerTemplate.sendBody("direct:requests", "<weather><temperature>25</temperature>" +
-//				"<pressure>760</pressure><humidity>75</humidity><date>2002-09-24</date></weather>");
-//
-//		MockEndpoint.assertIsSatisfied(kafkaResults);
-//	}
-//
-//	@Test
-//	public void sendOKStatusTest() throws InterruptedException {
-//		kafkaStatusTopic.expectedBodiesReceived("<status>ok</status>");
-//
-//		producerTemplate.sendBody("direct:requests", "<weather><temperature>25</temperature>" +
-//				"<pressure>760</pressure><humidity>75</humidity><date>2002-09-24</date></weather>");
-//
-//		kafkaStatusTopic.assertIsSatisfied(5000);
-//	}
-//
-//	@Test
-//	public void sendErrorStatusTest() throws InterruptedException {
-//		kafkaStatusTopic.expectedBodiesReceived("<status>error</status><message>Unmarshaling failed</message>");
-//
-//		producerTemplate.sendBody("direct:requests", "<not_weather><temperature>25</temperature>" +
-//				"<pressure>760</pressure><humidity>75</humidity><date>2002-09-24</date></weather>");
-//
-//		kafkaStatusTopic.assertIsSatisfied(5000);
-//	}
+	@Test
+	public void kafkaResultsTest() throws InterruptedException {
+		String body_xml = """
+<?xml version="1.0" encoding="UTF-8"?>
+    			<Player xmlns="/jaxb/gen">
+    				<name>Masha</name>
+    				<wins>1000</wins>
+    				<age>109</age>
+    			</Player>
+				""";
+		String body_json = "{\"name\":\"Masha\",\"wins\":1000,\"age\":109}";
+		kafkaResults.expectedBodiesReceived(body_json);
+		//kafkaResults.expectedMessageCount(1);
+		producerTemplate.sendBody("direct:requests", body_xml);
+
+		MockEndpoint.assertIsSatisfied(kafkaResults);
+	}
+
+	@Test
+	public void sendOKStatusTest() throws InterruptedException {
+		kafkaStatusTopic.expectedBodiesReceived("<status>ok</status><message>success</message>");
+		String body = """
+<?xml version="1.0" encoding="UTF-8"?>
+    			<Player xmlns="/jaxb/gen">
+    				<name>Kuku</name>
+    				<wins>9</wins>
+    				<age>9090</age>
+    			</Player>
+				""";
+		producerTemplate.sendBody("direct:requests", body);
+
+		kafkaStatusTopic.assertIsSatisfied(5000);
+	}
+	@Test
+	public void sendErrorStatusTest() throws InterruptedException {
+		kafkaStatusTopic.expectedBodiesReceived("<status>failed</status><message>Something went wrong while unmarshalling</message>");
+
+		producerTemplate.sendBody("direct:requests", "Text");
+
+		kafkaStatusTopic.assertIsSatisfied(5000);
+	}
 }

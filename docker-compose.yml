@@ -11,15 +11,6 @@ services:
     ports:
       - "5432:5432"
 
-  liquibase:
-    image: liquibase/liquibase
-    container_name: liquibase
-    depends_on:
-      - database
-    volumes:
-      - ./liquibase/db/:/liquibase/database/
-    command: bash -c "liquibase --defaults-file=/liquibase/database/liquibase.properties --search-path=/liquibase/database/ update"
-
   zookeeper1:
     image: confluentinc/cp-zookeeper:7.2.2
     container_name: zookeeper1
@@ -107,22 +98,3 @@ services:
       KAFKA_BROKER_ID: ignored
       KAFKA_ZOOKEEPER_CONNECT: ignored
     command: sh -c "sleep 20 && kafka-topics --create --if-not-exists --bootstrap-server broker1:29092 --partitions 1 --replication-factor 1 --topic requests && kafka-topics --create --if-not-exists --bootstrap-server broker1:29092 --partitions 1 --replication-factor 1 --topic status_topic && kafka-topics --create --if-not-exists --bootstrap-server broker2:39092 --partitions 1 --replication-factor 1 --topic results"
-
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus:/prometheus
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    volumes:
-      - ./grafana:/etc/grafana/provisioning/

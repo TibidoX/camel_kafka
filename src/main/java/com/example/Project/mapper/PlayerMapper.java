@@ -6,11 +6,13 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface PlayerMapper {
+    //@Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "wins", source = "wins")
     @Mapping(target = "age", source = "age")
-    PlayerDTO mapWithoutId(Player player);
+    PlayerDTO mapWithoutId(com.example.Project.entity.Player player);
 
+    //@Mapping(source = "id", target = "id")
     @Mapping(source = "name", target = "name")
     @Mapping(source = "wins", target = "wins")
     @Mapping(source = "age", target = "age")

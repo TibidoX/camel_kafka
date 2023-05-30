@@ -16,8 +16,8 @@ public class Player {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private Integer wins;
+//    @Column(nullable = false)
+//    private Integer wins;
 
     @Column(nullable = false)
     private Integer age;

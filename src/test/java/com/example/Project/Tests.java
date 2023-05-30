@@ -46,7 +46,7 @@ public class Tests {
 		com.example.Project.entity.Player player = new com.example.Project.entity.Player();
 		player.setAge(25);
 		player.setName("Eric");
-		player.setWins(90);
+		//player.setWins(90);
 		saveToDb.expectedBodiesReceived(player);
 
 		String body = """
@@ -72,7 +72,8 @@ public class Tests {
     				<age>109</age>
     			</Player>
 				""";
-		String body_json = "{\"name\":\"Masha\",\"wins\":1000,\"age\":109}";
+		//String body_json = "{\"name\":\"Masha\",\"wins\":1000,\"age\":109}";
+		String body_json = "{\"name\":\"Masha\",\"age\":109}";
 		kafkaResults.expectedBodiesReceived(body_json);
 		//kafkaResults.expectedMessageCount(1);
 		producerTemplate.sendBody("direct:requests", body_xml);

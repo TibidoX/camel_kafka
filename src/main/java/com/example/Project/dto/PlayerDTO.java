@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class PlayerDTO {
     @JsonProperty("name")
     private String name;
-    @JsonProperty("wins")
-    private Integer wins;
+//    @JsonProperty("wins")
+//    private Integer wins;
     @JsonProperty("age")
     private Integer age;
 }
